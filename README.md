@@ -24,6 +24,8 @@ If you are using Windows execute `docker volume create --driver local pgdata` an
 
 > There are 403 codes in the database even though the content is there. It was too late to change the method from *head* to *get* as you suggested
 
+[Google Drive link to the database](https://drive.google.com/open?id=1_rOJB_z2xKtohWERE8qKcYgtDK8tLs7H)
+
 # Network graph for eprostor.gov.si
 It is better if you download it
 ![the network](path1.png)

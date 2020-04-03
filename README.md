@@ -26,6 +26,8 @@ If you are using Windows execute `docker volume create --driver local pgdata` an
 
 [Google Drive link to the database](https://drive.google.com/open?id=1_rOJB_z2xKtohWERE8qKcYgtDK8tLs7H)
 
+Extract it with `tar -xvf database.tar.gz`
+
 # Network graph for eprostor.gov.si
-It is better if you download it
+It is better if you download it and zoom it
 ![the network](path1.png)

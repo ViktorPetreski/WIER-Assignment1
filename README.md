@@ -23,3 +23,7 @@ cat {dump_name}.sql | docker exec -i postgresql-wier psql -U postgres
 If you are using Windows execute `docker volume create --driver local pgdata` and remove *$PWD/* from the second line above.
 
 > There are 403 codes in the database even though the content is there. It was too late to change the method from *head* to *get* as you suggested
+
+# Network graph for eprostor.gov.si
+It is better if you download it
+![the network](path1.png)

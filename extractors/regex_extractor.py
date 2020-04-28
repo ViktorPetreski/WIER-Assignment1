@@ -59,10 +59,6 @@ def extract_contents_rtvslo(file_name):
     content_lst_2 = re.sub(r"<br>|</?strong>", "\n", content_lst[0][1])
     content_final = re.sub(r"</?\w+.*?>", "", content_lst_2)
 
-    # print(content_lst[0][0])
-    # print(author, published_time, title, subtitle, lead)
-    # print(content_final)
-
     final_dict = {
         "Author": author,
         "PublishedTime": published_time,
@@ -71,6 +67,8 @@ def extract_contents_rtvslo(file_name):
         "Lead": lead[0],
         "Content": "\n".join([img_caption, content_final])
     }
+
+    # TODO: Check how the final output should look like
 
     for key, val in final_dict.items():
         print(key, ":", val)

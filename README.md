@@ -1,4 +1,4 @@
-## :arrow_right: The second assignment is on branch: Assignment_2
+:arrow_right: The second assignment is on branch: Assignment_2
 
 # Assignment 1 - Web crawler
 

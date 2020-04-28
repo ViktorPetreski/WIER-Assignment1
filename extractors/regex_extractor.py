@@ -1,12 +1,6 @@
 import re
 import json
-
-
-def parse_file(file_name, encoding_type="iso-8859-1"):
-    with open(file_name, "r", encoding=encoding_type) as file:
-        content = file.read()
-
-    return content
+from .utils import *
 
 
 def extract_contents(file_name):
@@ -17,28 +11,21 @@ def extract_contents(file_name):
         re.MULTILINE | re.DOTALL)
     # the_tr = title_extractor.search(content)
     titles = re.findall(title_extractor, content)
-    price_extractor = re.compile(r"nowrap=\"nowrap\">(?:\S*\s*){,2}([$€]\s*[0-9.,]+)\s*(\(\d{,2}%\))?")
+    list_price_extractor = re.compile(r"nowrap=\"nowrap\"><s>([$€]\s*[0-9.,]+)</s>")
+    price_extractor = re.compile(r"nowrap=\"nowrap\"><span\s*class=\"bigred\"><b>([$€]\s*[0-9.,]+)</b></span>")
+    savings_extractor = re.compile(
+        r"nowrap=\"nowrap\"><span\s*class=\"littleorange\">([$€]\s*[0-9.,]+)\s*(\(\d{,2}%\))</span>")
+    list_prices = list_price_extractor.findall(content)
+    list_prices = pad_list(list_prices, titles)
     prices = price_extractor.findall(content)
+    prices = pad_list(prices, titles)
+    savings = savings_extractor.findall(content)
+    savings = pad_list(savings, titles, "tuple")
+    print(savings)
     content_extractor = re.compile(r"valign=\"top\"><span\s*class=\"\w+\">(.*?)<br>", re.DOTALL | re.MULTILINE)
     contents = content_extractor.findall(content)
-
-    prices_list = []
-    c = 0
-    while c < len(prices):
-        prices_list.append((prices[c][0], prices[c + 1][0], prices[c + 2][0], prices[c + 2][1]))
-        c += 3
-    product = zip(titles, contents, prices_list)
-    results = []
-    for title, content, price in product:
-        prod_dict = {
-            "title": title,
-            "content": content.replace("\n", " "),
-            "list_price": price[0],
-            "price": price[1],
-            "saving": price[2],
-            "saving_percent": price[3]
-        }
-        results.append(prod_dict)
+    product = zip(titles, contents, list_prices, prices, savings)
+    results = generate_json(product)
     print(len(results))
     print(json.dumps(results, indent=4))
 
@@ -89,4 +76,3 @@ def extract_contents_rtvslo(file_name):
         print(key, ":", val)
 
     # print(json.dumps(final_dict, indent=4, ensure_ascii=False))
-

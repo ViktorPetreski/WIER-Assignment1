@@ -1,5 +1,3 @@
-:arrow_right: The second assignment is on branch: Assignment_2
-
 # Assignment 1 - Web crawler
 
 For the purpose of this assignment we implemented a crawler that crawls *\*.gov.si* pages. The crawler is implemented in Python and for storing the information from the crawled pages we used PostgreSQL database with the provided *crawldb* model.

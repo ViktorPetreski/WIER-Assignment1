@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup as bs
-from extractors.regex_extractor import parse_file
 import re
+from extractors.utils import parse_file
 from lxml import etree, html
 
 
@@ -18,7 +18,7 @@ def _remove_all_attrs_except_saving(soup):
     return soup
 
 
-def prettify(file_name):
+def roadrunner(file_name):
     """
     Restructure a HTML so that each component is in new line.
     Unnecessary tags are removed:
@@ -33,7 +33,7 @@ def prettify(file_name):
     [script.extract() for script in soup(["script", "style", "meta", "link", "map"])]  # remove the tags in the list
     skip_tags = ["<b>", "</b>", "<i>", "</i>", "<br>", "<br/>", " <br>", " <br/>", "&gt;", "-", "|", "<s>", "</s>",
                  "<strong>", "</strong>"]  # skip this tags, i.e remove them
-    pretty_html = soup.prettify().splitlines(1)  # prettify the html and create list of the tags
+    pretty_html = soup.roadrunner().splitlines(1)  # prettify the html and create list of the tags
     sentence = ""
     combined_sentences = []
     for line in pretty_html:

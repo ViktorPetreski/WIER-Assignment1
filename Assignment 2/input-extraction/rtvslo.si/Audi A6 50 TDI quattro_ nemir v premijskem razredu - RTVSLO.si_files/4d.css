@@ -42,7 +42,7 @@
 .jwplayer.jw-state-idle .jw-icon-display:before {
     content: ''!important;
 }
-*/
+*
 .jw-display-icon-container.jw-background-color {
     background: transparent!important;
     opacity: 0.8;

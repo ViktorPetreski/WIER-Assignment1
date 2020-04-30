@@ -50,14 +50,17 @@ def extract_contents_rtvslo(file_name):
     lead = re.findall(lead_regex, content)
 
     content_regex = re.compile(
-        r"<figcaption itemprop=\"caption description\">\s*<span class=\"icon-photo\"><\/span>(.*?)\s*<\/figcaption>.*?\s*<p class=\"Body\"><\/p><p class=\"Body\">(.*?)\s*<p><\/p>\s*<div",
+        r"<figcaption itemprop=\"caption description\">\s*<span class=\"icon-photo\"><\/span>(.*?)<\/figcaption>.*?<script.*?<p.*?>(.*?)<div",
         re.MULTILINE | re.DOTALL)
 
     content_lst = re.findall(content_regex, content)
-    img_caption = content_lst[0][0]
 
-    content_lst_2 = re.sub(r"<br>|</?strong>", "\n", content_lst[0][1])
-    content_final = re.sub(r"</?\w+.*?>", "", content_lst_2)
+    content_final = []
+    for c in content_lst[0]:
+        # c_2 = re.sub(r"<br>|</?strong>|</figcaption>", "\n", c)
+        c_2 = re.sub(r"<br>|</?strong>|</figcaption>", " ", c)
+        c_final = re.sub(r"</?\w+.*?>|\t|\n", "", c_2)
+        content_final.append(c_final)
 
     final_dict = {
         "Author": author,
@@ -65,15 +68,13 @@ def extract_contents_rtvslo(file_name):
         "Title": title[0],
         "SubTitle": subtitle[0],
         "Lead": lead[0],
-        "Content": "\n".join([img_caption, content_final])
+        "Content": "\n".join([content_final[0], content_final[1]])
     }
 
-    # TODO: Check how the final output should look like
+    # for key, val in final_dict.items():
+    #     print(key, ":", val)
 
-    for key, val in final_dict.items():
-        print(key, ":", val)
-
-    # print(json.dumps(final_dict, indent=4, ensure_ascii=False))
+    print(json.dumps(final_dict, indent=4, ensure_ascii=False))
 
 
 def extract_contents_gsc(file_name):
@@ -101,6 +102,7 @@ def extract_contents_gsc(file_name):
 
     attribute_extractor = re.compile(r"<label>(.*?)\s*</label>")
     attributes = attribute_extractor.findall(content)
+
     var_dict = {}
     for attr in attributes:
         attr_extractor = re.compile(rf"<td\s+data-title=\"{re.escape(attr)}\">(.*?)</td>")
@@ -114,7 +116,8 @@ def extract_contents_gsc(file_name):
 
     separate_discount_price_extractor = re.compile(r"<ins>.*?([$€])</span>([0-9.,]+)</span></ins>")
     separate_discount_price = ["{}{}".format(curr, amount) for curr, amount in
-                               pad_list(separate_discount_price_extractor.findall(content), var_dict["Model"], "currency")]
+                               pad_list(separate_discount_price_extractor.findall(content), var_dict["Model"],
+                                        "currency")]
 
     variations = zip(separate_list_price, separate_discount_price)
     results = generate_json_gsc(title, price_from, price_to, description, category, tags, var_dict, variations)

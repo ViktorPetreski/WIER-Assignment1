@@ -8,17 +8,44 @@ def extract_content_overstock(file_name):
     tree = html.fromstring(parse_file(file_name))
     titles = tree.xpath('//table[2]/tbody/tr/td[5]//td[2]/a/b/text()')
     contents = tree.xpath('//table[2]/tbody/tr/td[5]//td[2]/span[@class="normal"]/text()')
+    i = 1
+    potential_break = False
+    results = []
+    while True:
+        product = {}
+        titles = tree.xpath(f'//table[2]/tbody/tr/td[5]//table//table/tbody/tr[@bgcolor][{i}]/td[2]/a/b/text()')
+        if titles:
+            contents = tree.xpath(
+                f'//table[2]/tbody/tr/td[5]//table//table/tbody/tr[@bgcolor][{i}]//td[2]/span[@class="normal"]/text()')
+            content = contents[0] if len(contents) > 0 else "N/A"
+            list_price = tree.xpath(f'//table[2]/tbody/tr/td[5]//table//table/tbody/tr[@bgcolor][{i}]//s/text()')
+            list_price = list_price[0] if len(list_price) > 0 else "N/A"
+            price = tree.xpath(
+                f'//table[2]/tbody/tr/td[5]//table//table/tbody/tr[@bgcolor][{i}]//span[@class="bigred"]/b/text()')
+            price = price[0] if len(price) > 0 else "N/A"
+            saving = tree.xpath(
+                f'//table[2]/tbody/tr/td[5]//table//table/tbody/tr[@bgcolor][{i}]//span[@class="littleorange"]/text()')
+            saving = saving[0] if len(saving) > 0 else "N/A"
+            product = {
+                "Title": titles[0],
+                "Content": content.replace("\n", " "),
+                "ListPrice": list_price,
+                "Price": price,
+                "Saving": saving,
+                "SavingPercent": "0%"
+            }
+            if saving != "N/A":
+                split_savings_matcher = re.compile(r"([$€]\s*[0-9.,]+)\s*(\([0-9.,]+%\))")
+                saving = split_savings_matcher.search(saving)
+                product["Saving"] = saving.group(1)
+                product["SavingPercent"] = saving.group(2)
+            results.append(product)
+        i += 1
+        if len(titles) == 0:
+            if potential_break:
+                break
+            potential_break = True
 
-    list_prices = tree.xpath('//s/text()')
-    list_prices = pad_list(list_prices, titles)
-    prices = tree.xpath('//span[@class="bigred"]/b/text()')
-    prices = pad_list(prices, titles)
-    savings = " ".join(tree.xpath('//span[@class="littleorange"]/text()'))
-    split_savings_matcher = re.compile(r"([$€]\s*[0-9.,]+)\s*(\([0-9.,]+%\))")
-    savings = split_savings_matcher.findall(savings)
-    savings = pad_list(savings, titles, "tuple")
-    product = zip(titles, contents, list_prices, prices, savings)
-    results = generate_json(product)
     print(json.dumps(results, indent=4))
 
 

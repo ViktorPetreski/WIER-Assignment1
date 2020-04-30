@@ -10,9 +10,15 @@ def parse_file(file_name, encoding_type="iso-8859-1"):
 
 
 def pad_list(first, second, t="list"):
-    while len(first) < len(second):
+    end = len(second)
+    while len(first) < end:
         if t == "tuple":
             first.append(('0', '(0%)'))
+        if t == "currency":
+            first.append(('$', '0'))
+        if t == "currency_xpath":
+            end = len(second) * 2
+            first.extend(['$', '0'])
         else:
             first.append('0')
     return first
@@ -35,17 +41,18 @@ def generate_json(product):
 
 def generate_json_gsc(title, price_from, price_to, description, category, tags, variation_attributes, variation_prices):
     variations_list = []
-    print(variation_attributes)
     keys = list(variation_attributes.keys())
-    vals = list(variation_attributes.values())
-    variations = zip(keys, vals, variation_prices)
+    i = 0
     for separate_list_price, separate_discount_price in variation_prices:
         var = {}
+        for key in keys:
+            var[key] = variation_attributes[key][i]
         var.update({
             "VariationListPrice": separate_list_price,
             "VariationPrice": separate_discount_price if separate_discount_price else "0"
         })
         variations_list.append(var)
+        i += 1
     results = []
     prod_dict = {
         "Title": title,

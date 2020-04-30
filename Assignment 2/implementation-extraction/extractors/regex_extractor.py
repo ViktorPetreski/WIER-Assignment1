@@ -101,7 +101,6 @@ def extract_contents_gsc(file_name):
 
     attribute_extractor = re.compile(r"<label>(.*?)\s*</label>")
     attributes = attribute_extractor.findall(content)
-
     var_dict = {}
     for attr in attributes:
         attr_extractor = re.compile(rf"<td\s+data-title=\"{re.escape(attr)}\">(.*?)</td>")
@@ -115,7 +114,7 @@ def extract_contents_gsc(file_name):
 
     separate_discount_price_extractor = re.compile(r"<ins>.*?([$€])</span>([0-9.,]+)</span></ins>")
     separate_discount_price = ["{}{}".format(curr, amount) for curr, amount in
-                               pad_list(separate_discount_price_extractor.findall(content), var_dict["Model"], "tuple")]
+                               pad_list(separate_discount_price_extractor.findall(content), var_dict["Model"], "currency")]
 
     variations = zip(separate_list_price, separate_discount_price)
     results = generate_json_gsc(title, price_from, price_to, description, category, tags, var_dict, variations)

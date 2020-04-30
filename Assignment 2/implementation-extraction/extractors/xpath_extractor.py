@@ -22,6 +22,38 @@ def extract_content_overstock(file_name):
     print(json.dumps(results, indent=4))
 
 
+def extract_content_rtvslo(file_name):
+    tree = html.fromstring(parse_file(file_name, "utf-8"))
+
+    author = tree.xpath('//div[@class="author-name"]/text()')
+    publishedTime = tree.xpath('//div[@class="publish-meta"]/text()')
+    publishedTime = re.sub('\t|\n', "", publishedTime[0])
+
+    title = tree.xpath('//header[@class="article-header"]//h1/text()')
+    subtitle = tree.xpath('//div[@class="subtitle"]/text()')
+    lead = tree.xpath('//header[@class="article-header"]//p[@class="lead"]/text()')
+
+    # content = tree.xpath(' //div[@class="article-body"]//figure[not[contains(class, \'gallery-bottom-thumb\')]]//figcaption[@itemprop="caption description"]/text()')
+    content = tree.xpath(
+        ' //div[@class="article-body"]//p/text() | //div[@class="article-body"]//p/strong/text() | //div[@class="article-body"]//figure[not(@class=\'photoswipe swiper-slide\') and not (@class=\'photoswipe gallery-bottom-thumb\')]/figcaption[@itemprop="caption description"]/text()')
+
+    content_processed = []
+    for c in content:
+        content_processed.append(re.sub("\t|\n", "", c))
+
+    # content = re.sub('\t',"", content[0])
+    final_dict = {
+        'Author': author[0],
+        'PublishedTime': publishedTime,
+        'Title': title[0],
+        'SubTitle': subtitle[0],
+        'Lead': lead[0],
+        'Content': " ".join(content_processed)
+    }
+
+    print(json.dumps(final_dict, indent=4, ensure_ascii=False))
+
+
 def extract_content_gsc(file_name):
     tree = html.fromstring(parse_file(file_name))
     title = tree.xpath('//h1[@class="product_title entry-title"]/text()')[0]

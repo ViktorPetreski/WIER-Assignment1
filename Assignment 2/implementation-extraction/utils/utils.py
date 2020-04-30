@@ -26,14 +26,16 @@ def pad_list(first, second, t="list"):
 
 def generate_json(product):
     results = []
-    for title, content, list_price, price, saving in product:
+    for title, content, price in product:
+        list_price, price, saving = price
+        saving = re.split(r"\s+", saving)
         prod_dict = {
             "Title": title,
             "Content": content.replace("\n", " "),
-            "ListPrice": list_price,
-            "Price": price,
-            "Saving": saving[0],
-            "SavingPercent": saving[1]
+            "ListPrice": list_price if list_price != "" else "N/A",
+            "Price": price if price != "" else "N/A",
+            "Saving": saving[0] if len(saving) > 1 else "N/A",
+            "SavingPercent": saving[1] if len(saving) > 1 else "N/A"
         }
         results.append(prod_dict)
     return results

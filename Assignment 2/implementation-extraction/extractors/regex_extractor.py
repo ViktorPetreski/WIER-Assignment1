@@ -11,22 +11,14 @@ def extract_contents(file_name):
         re.MULTILINE | re.DOTALL)
     # the_tr = title_extractor.search(content)
     titles = re.findall(title_extractor, content)
-    list_price_extractor = re.compile(r"nowrap=\"nowrap\"><s>([$€]\s*[0-9.,]+)</s>")
-    price_extractor = re.compile(r"nowrap=\"nowrap\"><span\s*class=\"bigred\"><b>([$€]\s*[0-9.,]+)</b></span>")
-    savings_extractor = re.compile(
-        r"nowrap=\"nowrap\"><span\s*class=\"littleorange\">([$€]\s*[0-9.,]+)\s*(\(\d{,2}%\))</span>")
-    list_prices = list_price_extractor.findall(content)
-    list_prices = pad_list(list_prices, titles)
+    price_extractor = re.compile(
+        r"(?:nowrap=\"nowrap\"><s>([$€]\s*[0-9.,]+)?</s>|\n*<tr><td align=\"right\"\s*nowrap=\"nowrap\"><b>Price:</b>).*?(?:<b>([$€]\s*[0-9.,]+)?</b>|\n*<tr><td align=\"right\"\s*nowrap=\"nowrap\"><b>You Save:</b>).*?(?:<span\sclass=\"littleorange\">([$€]\s*[0-9.,]+\s\(\d{,2}%\))?</span></td></tr>|\n*</tbody></table>)",
+        re.DOTALL | re.MULTILINE)
     prices = price_extractor.findall(content)
-    prices = pad_list(prices, titles)
-    savings = savings_extractor.findall(content)
-    savings = pad_list(savings, titles, "tuple")
-    print(savings)
     content_extractor = re.compile(r"valign=\"top\"><span\s*class=\"\w+\">(.*?)<br>", re.DOTALL | re.MULTILINE)
     contents = content_extractor.findall(content)
-    product = zip(titles, contents, list_prices, prices, savings)
+    product = zip(titles, contents, prices)
     results = generate_json(product)
-    print(len(results))
     print(json.dumps(results, indent=4))
 
 

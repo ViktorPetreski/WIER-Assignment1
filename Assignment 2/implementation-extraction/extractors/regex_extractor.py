@@ -1,6 +1,6 @@
 import re
 import json
-from .utils import *
+from utils.utils import *
 
 
 def extract_contents(file_name):
@@ -74,3 +74,49 @@ def extract_contents_rtvslo(file_name):
         print(key, ":", val)
 
     # print(json.dumps(final_dict, indent=4, ensure_ascii=False))
+
+
+def extract_contents_gsc(file_name):
+    content = parse_file(file_name, "utf-8")
+    title_extractor = re.compile(r"class=\"product_title\s+entry-title\">\s*(.*?)</h1>", re.MULTILINE | re.DOTALL)
+    price_from_extractor = re.compile(
+        r"<p\s+class=\"price\"><span\s+class=\"woocommerce-Price-amount\samount\">.*?([$€])</span>([0-9.,]+)</span>\s+–\s+")
+    price_to_extractor = re.compile(
+        r"<span\s+class=\"woocommerce-Price-amount\samount\">.*?([$€])</span>([0-9.,]+)</span></p>")
+    price_from = price_from_extractor.search(content)
+    price_to = price_to_extractor.search(content)
+
+    title = title_extractor.search(content).group(1)
+    price_to = "{}{}".format(price_to.group(1), price_to.group(2))
+    price_from = "{}{}".format(price_from.group(1), price_from.group(2))
+    description_extractor = re.compile(r"woocommerce-product-details__short-description\">(.*?)</div>",
+                                       re.MULTILINE | re.DOTALL)
+    description = re.sub(r"</?p>|\n", "", description_extractor.search(content).group(1))
+
+    category_extractor = re.compile(r"class=\"posted_in\">Category:\s+<a.*?rel=\"tag\">(.*?)</a></span>")
+    category = category_extractor.search(content).group(1)
+
+    tags_extractor = re.compile(r"<a href=\".*?product-tag.*?\"\s+rel=\"tag\">(.*?)</a>")
+    tags = tags_extractor.findall(content)
+
+    attribute_extractor = re.compile(r"<label>(.*?)\s*</label>")
+    attributes = attribute_extractor.findall(content)
+
+    var_dict = {}
+    for attr in attributes:
+        attr_extractor = re.compile(rf"<td\s+data-title=\"{re.escape(attr)}\">(.*?)</td>")
+        attr_val = attr_extractor.findall(content)
+        var_dict[attr] = attr_val
+
+    separate_list_price_extractor = re.compile(
+        r"<span\sclass=\"item\"><span\sclass=\"price\">(?:<del>)?.*?([$€])</span>([0-9.,]+)</span>(?:</del>)?")
+    separate_list_price = ["{}{}".format(curr, amount) for curr, amount in
+                           separate_list_price_extractor.findall(content)]
+
+    separate_discount_price_extractor = re.compile(r"<ins>.*?([$€])</span>([0-9.,]+)</span></ins>")
+    separate_discount_price = ["{}{}".format(curr, amount) for curr, amount in
+                               pad_list(separate_discount_price_extractor.findall(content), var_dict["Model"], "tuple")]
+
+    variations = zip(separate_list_price, separate_discount_price)
+    results = generate_json_gsc(title, price_from, price_to, description, category, tags, var_dict, variations)
+    print(json.dumps(results, indent=4))

@@ -1,7 +1,5 @@
 from bs4 import BeautifulSoup as bs
 import re
-from extractors.utils import parse_file
-from lxml import etree, html
 
 
 # remove all attributes except some tags(only saving ['href','src'] attr)

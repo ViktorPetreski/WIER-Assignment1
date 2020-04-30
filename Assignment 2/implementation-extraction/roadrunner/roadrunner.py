@@ -1,6 +1,5 @@
-from .utils import *
 from lxml import html
-
+from utils.utils import *
 
 def run(wrapper, sample):
     wrapper = prettify(wrapper)

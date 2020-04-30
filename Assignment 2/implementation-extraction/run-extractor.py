@@ -1,6 +1,4 @@
 from extractors import regex_extractor, xpath_extractor
-
-from roadrunner.utils import *
 from roadrunner.roadrunner import roadrunner
 import argparse
 
@@ -13,5 +11,6 @@ if __name__ == '__main__':
     # regex_extractor.extract_contents("./input-extraction/overstock.com/jewelry02.html")
     # xpath_extractor.extract_content("./input-extraction/overstock.com/jewelry01.html")
     # prettify.run("./input-extraction/WebPages/overstock.com/jewelry01.html", "./WebPages/overstock.com/jewelry02.html")
-    regex_extractor.extract_contents_rtvslo(
-        "../input-extraction/rtvslo.si/Audi A6 50 TDI quattro_ nemir v premijskem razredu - RTVSLO.si.html")
+    # regex_extractor.extract_contents_rtvslo(
+    #     "../input-extraction/rtvslo.si/Audi A6 50 TDI quattro_ nemir v premijskem razredu - RTVSLO.si.html")
+    regex_extractor.extract_contents_gsc("../input-extraction/globalscaleco.com/gsc01.html")

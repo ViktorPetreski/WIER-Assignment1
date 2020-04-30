@@ -1,7 +1,7 @@
 from lxml import html
 import json
 import re
-from .utils import *
+from utils.utils import parse_file, pad_list, generate_json
 
 def extract_content(file_name):
     tree = html.fromstring(parse_file(file_name))

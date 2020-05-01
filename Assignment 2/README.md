@@ -4,11 +4,6 @@ For this assignment, we implemented content extractors using regular expressions
 
 We attach the [pseudo code pdf](Pseudocode.pdf) for better visibility.
 
-## Additional website
-We chose [Global Scale Company](globalscalecompany.com)'s website. It has mix of both data and list elements. The structure of the page and the names of the fields that we extracted are shown on the image below. 
-![the structure](combined.png)
-
-
 ## Execution
 
 #### Requirements
@@ -19,3 +14,9 @@ Call `run-extractor.py` with the type of the extractor needed: _regex_, _xpath_,
 Example: `run-extractor.py regex`
 
 Each extractor prints the result on standard output. The name of the domain is also printed for better distinction of the results 
+
+## Additional website
+We chose [Global Scale Company](globalscalecompany.com)'s website. It has mix of both data and list elements. The structure of the page and the names of the fields that we extracted are shown on the image below. 
+![the structure](combined.png)
+
+

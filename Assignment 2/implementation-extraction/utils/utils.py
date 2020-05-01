@@ -14,12 +14,12 @@ def pad_list(first, second, t="list"):
     while len(first) < end:
         if t == "tuple":
             first.append(('0', '(0%)'))
-        if t == "currency":
+        elif t == "currency":
             first.append(('$', '0'))
-        if t == "currency_xpath":
+        elif t == "currency_xpath":
             end = len(second) * 2
             first.extend(['$', '0'])
-        else:
+        elif t == "list":
             first.append('0')
     return first
 

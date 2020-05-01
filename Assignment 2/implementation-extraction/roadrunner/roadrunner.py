@@ -2,12 +2,11 @@ from lxml import html
 from utils.utils import *
 
 
-def run(wrapper, sample, encoding = "iso-8859-1"):
-    wrapper = prettify(wrapper, encoding = encoding)
-    sample = prettify(sample, encoding = encoding)
+def run(wrapper, sample, encoding="iso-8859-1"):
+    wrapper = prettify(wrapper, encoding=encoding)
+    sample = prettify(sample, encoding=encoding)
     res_final = roadrunner(wrapper, sample, 0, 0, [])
     res = "".join(res_final)
-    # res = "".join(roadrunner(wrapper, sample, 0, 0, []))
     document_root = html.fromstring(res)
     pretty_html = html.tostring(document_root, encoding='unicode', pretty_print=True, method="html")
     print(pretty_html)
@@ -42,9 +41,7 @@ def roadrunner(wrapper, sample, i, j, result):
         # previous tags
         prev_wrapper_tag = wrapper[i - 1]
         prev_sample_tag = sample[j - 1]
-        is_optional = False  # wether it is optional element or not
-        # wrapper_part = wrapper[i - 10: i + 10]  # for debugging
-        # sample_part = sample[j - 10: j + 10]  # for debugging
+        is_optional = False  # whether it is optional element or not
 
         # First check if there are loops:
 
@@ -54,7 +51,7 @@ def roadrunner(wrapper, sample, i, j, result):
                                                                                                 line_wrapper):
             # find the squares
             internal_wrapper, internal_sample, next_i = match_square(wrapper, line_wrapper, i)
-            next_wrap_token = wrapper[next_i]  # for debugging
+
             if internal_sample is not None:
                 # call the algorithm with the smaller squares found. Here it is called with wrapper and sample from
                 # the same list (in this case, the wrapper)
@@ -89,29 +86,6 @@ def roadrunner(wrapper, sample, i, j, result):
 
         # it detected optional
         if is_optional:
-            atemp = sample[j - 5: j + 5]  # for debugging
-            atemp1 = wrapper[i - 5: i + 5]  # for debugging
-
-            # # needs improvement:
-            # if check_tag(line_wrapper):  # if the element in the wrapper is tag look for it in the sample
-            #     found_wrap, counter_wrap, res_wrap = assess_next_lines(line_wrapper, sample, j)
-            #     # this is to avoid multiple )? after each optional
-            #     if result[-1][-1] == "?":
-            #         latest_item = result.pop(-1)
-            #         res_wrap = "{}{}".format(latest_item[:-2], res_wrap)
-            #     if found_wrap:
-            #         result.append(res_wrap)
-            #     return roadrunner(wrapper, sample, i, j + counter_wrap, result)
-            # elif check_tag(line_sample):  # same as above, just for the sample element in the wrapper
-            #     found_samp, counter_samp, res_samp = assess_next_lines(line_sample, wrapper, i)
-            #     if result[-1][-1] == "?":
-            #         latest_item = result.pop(-1)
-            #         res_samp = "{}{}".format(latest_item[:-2], res_samp)
-            #     if found_samp:
-            #         result.append(res_samp)
-            #     return roadrunner(wrapper, sample, i + counter_samp, j, result)
-            # else:  # nothing is found, have to move on ?? Room for improvement
-            #     return roadrunner(wrapper, sample, i + 1, j + 1, result)
 
             if check_tag(line_wrapper) and check_tag(line_sample):
                 # Two tags on the same line, find which one is optional
@@ -122,16 +96,14 @@ def roadrunner(wrapper, sample, i, j, result):
                     if result[-1][-1] == "?":
                         latest_item = result.pop(-1)
                         res_wrap = "{}{}".format(latest_item[:-2], res_wrap)
-                        res_samp_other = "{}{}".format(latest_item[:-2], res_samp)
 
                         if found_wrap:
-                           result.append(res_wrap)
+                            result.append(res_wrap)
                     return roadrunner(wrapper, sample, i, j + counter_wrap, result)
                 else:
                     if result[-1][-1] == "?":
                         latest_item = result.pop(-1)
                         res_samp = "{}{}".format(latest_item[:-2], res_samp)
-                        res_wrap_other = "{}{}".format(latest_item[:-2], res_wrap)
                     if found_samp:
                         result.append(res_samp)
                     return roadrunner(wrapper, sample, i + counter_samp, j, result)
@@ -154,5 +126,5 @@ def roadrunner(wrapper, sample, i, j, result):
                 if found_samp:
                     result.append(res_samp)
                 return roadrunner(wrapper, sample, i + counter_samp, j, result)
-            else:  # nothing is found, have to move on ?? Room for improvement
+            else:  # nothing is found, have to move on
                 return roadrunner(wrapper, sample, i + 1, j + 1, result)

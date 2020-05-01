@@ -107,7 +107,7 @@ def prettify(file_name):
     [script.extract() for script in soup(["script", "style", "meta", "link", "map"])]  # remove the tags in the list
     skip_tags = ["<b>", "</b>", "<i>", "</i>", "<br>", "<br/>", " <br>", " <br/>", "&gt;", "-", "|", "<s>", "</s>",
                  "<strong>", "</strong>"]  # skip this tags, i.e remove them
-    pretty_html = soup.splitlines(1)  # prettify the html and create list of the tags
+    pretty_html = soup.prettify().splitlines(1)  # prettify the html and create list of the tags
     sentence = ""
     combined_sentences = []
     for line in pretty_html:

@@ -1,7 +1,5 @@
-import re
 import json
 from utils.utils import *
-
 
 def extract_contents(file_name):
     content = parse_file(file_name)
@@ -9,15 +7,20 @@ def extract_contents(file_name):
     title_extractor = re.compile(
         r"<td\s*valign=\"top\">\s*<a href=\"http://www\.overstock\.com/cgi-bin/d2\.cgi\?PAGE=PROFRAME&amp;PROD_ID=\d+\"><b>(\d{,2}-[K|k][T|t]\.?\s*(?:\S*\s*){,6}\(?\d*\.?\d*\s\S*\)?)</b></a>",
         re.MULTILINE | re.DOTALL)
-    # the_tr = title_extractor.search(content)
+    # the_tr = title_extractor.search(content)?
+    list_prices_extractor = re.compile(r"(?:nowrap=\"nowrap\"><s>([$€]\s*[0-9.,]+)?</s>|.*?</tbody></table>[\s\n]*</td><td\s*valign=\"top\"><span\s*class=\"normal\">)")
+    prices_extractor = re.compile(r"(?:<b>([$€]\s*[0-9.,]+)?</b>|.*?</tbody></table>[\s\n]*</td><td\s*valign=\"top\"><span\s*class=\"normal\">)")
+    savings_extractor = re.compile(r"(?:<span\sclass=\"littleorange\">([$€]\s*[0-9.,]+\s\(\d{,2}%\))?</span></td></tr>|.*?</tbody></table>[\s\n]*</td><td\s*valign=\"top\"><span\s*class=\"normal\">)")
+
+    list_prices = remove_empty_items(list_prices_extractor.findall(content))
+    prices = remove_empty_items(prices_extractor.findall(content))
+    saving_prices = remove_empty_items(savings_extractor.findall(content))
+
     titles = re.findall(title_extractor, content)
-    price_extractor = re.compile(
-        r"(?:nowrap=\"nowrap\"><s>([$€]\s*[0-9.,]+)?</s>|\n*<tr><td align=\"right\"\s*nowrap=\"nowrap\"><b>Price:</b>).*?(?:<b>([$€]\s*[0-9.,]+)?</b>|\n*<tr><td align=\"right\"\s*nowrap=\"nowrap\"><b>You Save:</b>).*?(?:<span\sclass=\"littleorange\">([$€]\s*[0-9.,]+\s\(\d{,2}%\))?</span></td></tr>|\n*</tbody></table>)",
-        re.DOTALL | re.MULTILINE)
-    prices = price_extractor.findall(content)
+
     content_extractor = re.compile(r"valign=\"top\"><span\s*class=\"\w+\">(.*?)<br>", re.DOTALL | re.MULTILINE)
     contents = content_extractor.findall(content)
-    product = zip(titles, contents, prices)
+    product = zip(titles, contents, list_prices, prices, saving_prices)
     results = generate_json(product)
     print(json.dumps(results, indent=4))
 

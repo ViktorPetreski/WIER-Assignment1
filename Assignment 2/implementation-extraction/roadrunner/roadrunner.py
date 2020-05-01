@@ -13,14 +13,14 @@ def run(wrapper, sample):
 
 def roadrunner(wrapper, sample, i, j, result):
     """
-    The main algorithm.
-    :param wrapper: the wrapper page
-    :param sample: the sample page
-    :param i: current position in the wrapper page
-    :param j: current position in the sample page
-    :param result: The current partial generated wrapper (Not the same as the wrapper param)
-    :return: The finished wrapper
-    """
+       The main algorithm.
+       :param wrapper: the wrapper page
+       :param sample: the sample page
+       :param i: current position in the wrapper page
+       :param j: current position in the sample page
+       :param result: The current partial generated wrapper (Not the same as the wrapper param)
+       :return: The finished wrapper
+       """
     if i == len(wrapper) or j == len(sample):  # finish the recursion
         return result
     # get the current html element from the wrapper and sample

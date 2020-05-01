@@ -26,8 +26,7 @@ def pad_list(first, second, t="list"):
 
 def generate_json(product):
     results = []
-    for title, content, price in product:
-        list_price, price, saving = price
+    for title, content, list_price, price, saving in product:
         saving = re.split(r"\s+", saving)
         prod_dict = {
             "Title": title,
@@ -69,6 +68,16 @@ def generate_json_gsc(title, price_from, price_to, description, category, tags, 
     return results
 
 
+def remove_empty_items(array):
+    result = []
+    for i in range(len(array) - 1):
+        if array[i] != '' and array[i + 1] == '':
+            result.append(array[i])
+        elif array[i] == '' and array[i+1] == '':
+            result.append('')
+    return result
+
+
 # remove all attributes except some tags(only saving ['href','src'] attr)
 def _remove_all_attrs_except_saving(soup):
     whitelist = []
@@ -98,7 +107,7 @@ def prettify(file_name):
     [script.extract() for script in soup(["script", "style", "meta", "link", "map"])]  # remove the tags in the list
     skip_tags = ["<b>", "</b>", "<i>", "</i>", "<br>", "<br/>", " <br>", " <br/>", "&gt;", "-", "|", "<s>", "</s>",
                  "<strong>", "</strong>"]  # skip this tags, i.e remove them
-    pretty_html = soup.roadrunner().splitlines(1)  # prettify the html and create list of the tags
+    pretty_html = soup.splitlines(1)  # prettify the html and create list of the tags
     sentence = ""
     combined_sentences = []
     for line in pretty_html:

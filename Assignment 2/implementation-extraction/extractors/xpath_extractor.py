@@ -1,7 +1,7 @@
 from lxml import html
 import json
 import re
-from utils.utils import parse_file, pad_list, generate_json, generate_json_gsc
+from utils.utils import parse_file, pad_list, generate_json_gsc
 
 
 def extract_content_overstock(file_name):
@@ -62,7 +62,7 @@ def extract_content_rtvslo(file_name):
 
     # content = tree.xpath(' //div[@class="article-body"]//figure[not[contains(class, \'gallery-bottom-thumb\')]]//figcaption[@itemprop="caption description"]/text()')
     content = tree.xpath(
-        ' //div[@class="article-body"]//p/text() | //div[@class="article-body"]//p/strong/text() | //div[@class="article-body"]//figure[not(@class=\'photoswipe swiper-slide\') and not (@class=\'photoswipe gallery-bottom-thumb\')]/figcaption[@itemprop="caption description"]/text()')
+        ' //div[@class="article-body"]//p/text() | //div[@class="article-body"]//p/strong/text() | //div[@class="article-body"]//figure/figcaption[@itemprop="caption description"]/span/text()')
 
     content_processed = []
     for c in content:

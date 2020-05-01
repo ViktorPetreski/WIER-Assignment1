@@ -102,7 +102,7 @@ def _remove_all_attrs_except_saving(soup):
     return soup
 
 
-def prettify(file_name):
+def prettify(file_name, encoding = "iso-8859-1"):
     """
     Restructure a HTML so that each component is in new line.
     Unnecessary tags are removed:
@@ -111,7 +111,7 @@ def prettify(file_name):
     :return: list of strings
     """
 
-    content = parse_file(file_name)
+    content = parse_file(file_name, encoding)
     soup = bs(content, features="lxml")  # make BeautifulSoup
     soup = _remove_all_attrs_except_saving(soup)
     [script.extract() for script in soup(["script", "style", "meta", "link", "map"])]  # remove the tags in the list
@@ -139,7 +139,7 @@ def prettify(file_name):
 def ending_tag(tag):
     """
     :param tag: word that needs to be checked
-    :return: shether the word is closing tag
+    :return: whether the word is closing tag
     """
     matcher = re.compile(r"</\w+>")
     return matcher.search(tag) is not None
@@ -147,7 +147,7 @@ def ending_tag(tag):
 
 def starting_tag(tag):
     """
-    :param tag: word that need sto be checked
+    :param tag: word that needs to be checked
     :return: whether the word is opening tag
     """
     matcher = re.compile(r"<\w+>")
@@ -156,7 +156,7 @@ def starting_tag(tag):
 
 def check_tag(word):
     """
-    :param word: word that need to be checked
+    :param word: word that needs to be checked
     :return: whether the word is an HTML tag
     """
     matcher = re.compile(r"</?\w+>")

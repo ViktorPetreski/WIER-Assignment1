@@ -32,12 +32,15 @@ if __name__ == '__main__':
 
     if values['algorithm'] == 'roadrunner':
         sys.setrecursionlimit(3000)
-        # roadrunner.run("../input-extraction/overstock.com/jewelry01.html",
-        #                "../input-extraction/overstock.com/jewelry02.html")
-        # roadrunner.run(
-        #     "../input-extraction/rtvslo.si/Audi A6 50 TDI quattro_ nemir v premijskem razredu - RTVSLO.si.html",
-        #     "../input-extraction/rtvslo.si/Volvo XC 40 D4 AWD momentum_ suvereno med najboljše v razredu - RTVSLO.si.html",
-        #     encoding='utf-8')
+        print('OVERSTOCK')
+        roadrunner.run("../input-extraction/overstock.com/jewelry01.html",
+                       "../input-extraction/overstock.com/jewelry02.html")
+        print('RTVSLO')
+        roadrunner.run(
+            "../input-extraction/rtvslo.si/Audi A6 50 TDI quattro_ nemir v premijskem razredu - RTVSLO.si.html",
+            "../input-extraction/rtvslo.si/Volvo XC 40 D4 AWD momentum_ suvereno med najboljše v razredu - RTVSLO.si.html",
+            encoding='utf-8')
+        print('GLOBALSCALECO')
         roadrunner.run(
             "../input-extraction/globalscaleco.com/gsc03.html",
             "../input-extraction/globalscaleco.com/gsc04.html", encoding='utf-8')

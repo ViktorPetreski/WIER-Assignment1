@@ -27,14 +27,13 @@ def pad_list(first, second, t="list"):
 def generate_json(product):
     results = []
     for title, content, list_price, price, saving in product:
-        saving = re.split(r"\s+", saving)
         prod_dict = {
             "Title": title,
             "Content": content.replace("\n", " "),
-            "ListPrice": list_price if list_price != "" else "N/A",
-            "Price": price if price != "" else "N/A",
-            "Saving": saving[0] if len(saving) > 1 else "N/A",
-            "SavingPercent": saving[1] if len(saving) > 1 else "N/A"
+            "ListPrice": list_price,
+            "Price": price,
+            "Saving": saving[0],
+            "SavingPercent": saving[1]
         }
         results.append(prod_dict)
     return results
@@ -68,13 +67,24 @@ def generate_json_gsc(title, price_from, price_to, description, category, tags, 
     return results
 
 
-def remove_empty_items(array):
+def remove_empty_items(array, mode="basic"):
     result = []
     for i in range(len(array) - 1):
-        if array[i] != '' and array[i + 1] == '':
-            result.append(array[i])
-        elif array[i] == '' and array[i+1] == '':
-            result.append('')
+        if mode == "basic":
+            if array[i] != '' and array[i + 1] == '':
+                result.append(array[i])
+            elif array[i] == '' and array[i + 1] == '':
+                result.append('N/A')
+        elif mode == "tuples":
+            if array[i][0] != '' and array[i + 1][0] == '' and array[i][1] != '' and array[i + 1][1] == '':
+                result.append(array[i])
+            elif array[i][0] == '' and array[i + 1][0] == '' and array[i][1] == '' and array[i + 1][1] == '' and result[-1] != ("N/A", "N/A"):
+
+                result.append(("N/A", "N/A"))
+            elif array[i][0] != '' and array[i][1] == '':
+                result.append((array[i][0], "N/A"))
+            elif array[i][0] == '' and array[i][1] != '':
+                result.append(("N/A", array[i][1]))
     return result
 
 

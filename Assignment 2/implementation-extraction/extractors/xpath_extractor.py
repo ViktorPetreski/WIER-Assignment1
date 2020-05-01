@@ -6,8 +6,6 @@ from utils.utils import parse_file, pad_list, generate_json_gsc
 
 def extract_content_overstock(file_name):
     tree = html.fromstring(parse_file(file_name))
-    titles = tree.xpath('//table[2]/tbody/tr/td[5]//td[2]/a/b/text()')
-    contents = tree.xpath('//table[2]/tbody/tr/td[5]//td[2]/span[@class="normal"]/text()')
     i = 1
     potential_break = False
     results = []

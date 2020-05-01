@@ -10,8 +10,8 @@ def run(wrapper, sample, encoding="iso-8859-1"):
     document_root = html.fromstring(res)
     pretty_html = html.tostring(document_root, encoding='unicode', pretty_print=True, method="html")
     print(pretty_html)
-    # with open("res.html", "w", encoding = encoding) as file:
-    #     file.write(pretty_html)
+    with open("globalscaleco_wrapper.html", "w", encoding = encoding) as file:
+        file.write(pretty_html)
 
 
 def roadrunner(wrapper, sample, i, j, result):

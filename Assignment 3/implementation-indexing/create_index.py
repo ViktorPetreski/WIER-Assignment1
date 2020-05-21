@@ -118,6 +118,6 @@ def index():
 
 if __name__ == '__main__':
     # index()
-    items = get_query("trgovina")
+    items = get_query("social services")
     items = process_query_data(items)
     print_query(items)

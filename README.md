@@ -49,7 +49,7 @@ It is better if you download it and zoom it
 
 For this assignment, we implemented content extractors using regular expressions, XPath and automatic web extraction with a roadrunner-like algorithm. We tested our implementation using the provided offline web pages and a third one of our choice.
 
-We attach the [pseudo code pdf](Pseudocode.pdf) for better visibility.
+We attach the [pseudo code pdf](pseudocode-extraction.pdf) for better visibility.
 There is also a separate HTML file for each web site that contains the extracted output from the roadrunner-like algorithm.
 
 [The report](report-extraction.pdf)

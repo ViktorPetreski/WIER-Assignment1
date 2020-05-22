@@ -1,3 +1,4 @@
+import argparse
 import glob
 from collections import defaultdict, Counter
 import bs4 as soup
@@ -9,14 +10,14 @@ import time
 
 def search(query):
     start = time.time()
-    documents = glob.glob('../data/**/*.html', recursive=True)
+    documents = glob.glob('./data/**/*.html', recursive=True)
     results_list = []
     query_parts = preprocess_content(query, False)
     headers = ["Frequencies", "Document", "Snippet"]
     for doc in tqdm(documents, position=0, leave=True):
         d = defaultdict(list)
-        document = doc.replace("../data/", "")
-        with open(doc) as file:
+        document = doc.replace("./data/", "")
+        with open(doc, encoding="utf-8") as file:
             content = soup.BeautifulSoup(file.read(), features="lxml")
         text = strip_html_elements(content.find("body"))
         html_text = prepare_raw_html(text, sub_at=True)
@@ -62,4 +63,7 @@ def search(query):
 
 
 if __name__ == '__main__':
-    search("social services")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("query", help='the query that you want to check')
+    args = parser.parse_args()
+    search(args.query)

@@ -31,7 +31,7 @@ def create_table():
 
 
 def connect():
-    conn = sqlite3.connect('inverted-index.db')
+    conn = sqlite3.connect('./implementation-indexing/inverted-index.db')
     # Create table
     c = conn.cursor()
     return conn, c

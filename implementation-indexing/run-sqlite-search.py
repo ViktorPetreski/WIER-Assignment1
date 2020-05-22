@@ -1,3 +1,5 @@
+import argparse
+
 from tabulate import tabulate
 import os
 import bs4 as soup
@@ -23,10 +25,10 @@ def modify_get_query(no_of_arguments):
     return new_query
 
 
-def print_query(item_dict):
+def print_query(item_dict, query):
     printing_list = []
     for key, val in item_dict.items():
-        with open(os.path.join("..", "data", key)) as file:
+        with open(os.path.join("data", key), encoding="utf-8") as file:
             html = soup.BeautifulSoup(file.read(), features="lxml")
         body = html.find("body")
         # stripped_html = strip_html_elements(body)
@@ -35,8 +37,8 @@ def print_query(item_dict):
         parts = text.split()
         snippet = ""
         for count, i in enumerate(val["idx"]):
-            start = max(i - 2, 0)
-            end = min(i + 3, len(parts))
+            start = max(i - 3, 0)
+            end = min(i + 4, len(parts))
             dots_start = " ... "
             dots_end = " ... "
             if count != 0:
@@ -80,7 +82,7 @@ def get_query(query):
     query_items = preprocess_content(query, False)
     new_query = modify_get_query(len(query_items))
     conn, curr = connect()
-    # items = []
+    items = []
     try:
         cursor = curr.execute(new_query, tuple(query_items))
         items = cursor.fetchall()
@@ -91,11 +93,19 @@ def get_query(query):
     return items, end * 1000
 
 
-if __name__ == '__main__':
-    query = "social services"
+def search_with_inverted_index(query):
     items, exec_T = get_query(query)
     items = process_query_data(items)
     # items = process_query_data(items)
     print(f"Results for query: {query}")
     print(f"Results found in: {round(exec_T, 2)} ms")
-    print_query(items)
+    print_query(items, query)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("query", help='the query that you want to check')
+    args = parser.parse_args()
+    search_with_inverted_index(args.query)
+
+

@@ -88,6 +88,8 @@ Examples: `implementation-indexing/run-basic-search.py "social services"`, `impl
 
 Both of the functions will print the output in the required format on the standard output.
 
+> You can try to somewhat limit the terminal horizontal output using `tput rmam` (should disable the text wrapping) and then to reenable the wrapping `tput smam`
+
 ## Results
 > Click to expand
 <details><summary><i>trgovina</i> output</summary>

@@ -950,7 +950,7 @@ Results found in: 10.61 ms
  </details>
  
  <details>
- <summary><i>sustrezne šifre skladišč</i> output</summary>
+ <summary><i>ustrezne šifre skladišč</i> output</summary>
  <pre>
  <code>
  Results for query: ustrezne šifre skladišč

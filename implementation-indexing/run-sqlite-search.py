@@ -25,7 +25,7 @@ def modify_get_query(no_of_arguments):
     return new_query
 
 
-def print_query(item_dict, query):
+def print_query(item_dict, query, pretty_print):
     printing_list = []
     for key, val in item_dict.items():
         with open(os.path.join("data", key), encoding="utf-8") as file:
@@ -48,8 +48,8 @@ def print_query(item_dict, query):
             if end == len(parts):
                 dots_end = ""
             part = parts[start: end]
-            # if count % 3 == 2:
-            #     snippet += "\n... "
+            if count % 3 == 2 and pretty_print:
+                snippet += "\n... "
             snippet += f"{dots_start}{' '.join(part)}{dots_end}"
         item_list = [val["freq"], key, snippet]
         printing_list.append(item_list)
@@ -93,19 +93,18 @@ def get_query(query):
     return items, end * 1000
 
 
-def search_with_inverted_index(query):
+def search_with_inverted_index(query, pretty_print):
     items, exec_T = get_query(query)
     items = process_query_data(items)
     # items = process_query_data(items)
     print(f"Results for query: {query}")
     print(f"Results found in: {round(exec_T, 2)} ms")
-    print_query(items, query)
+    print_query(items, query, pretty_print)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("query", help='the query that you want to check')
+    parser.add_argument("--pretty_print", default=False, help='True if you want to format the output with new lines')
     args = parser.parse_args()
-    search_with_inverted_index(args.query)
-
-
+    search_with_inverted_index(args.query, args.pretty_print)

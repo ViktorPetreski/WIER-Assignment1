@@ -8,7 +8,7 @@ from tabulate import tabulate
 from tqdm import tqdm
 import time
 
-def search(query):
+def search(query, pretty_print):
     start = time.time()
     documents = glob.glob('./data/**/*.html', recursive=True)
     results_list = []
@@ -52,6 +52,8 @@ def search(query):
                 if end == len(parts):
                     dots_end = ""
                 part = parts[start: end]
+                if count % 3 == 2 and pretty_print:
+                    snippet += "\n... "
                 snippet += f"{dots_start}{' '.join(part)}{dots_end}"
             item_list = [freq, document, snippet]
             results_list.append(item_list)
@@ -65,5 +67,7 @@ def search(query):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("query", help='the query that you want to check')
+    parser.add_argument("--pretty_print", default=False, help='True if you want to format the output with new lines')
     args = parser.parse_args()
-    search(args.query)
+    search(args.query, args.pretty_print)
+

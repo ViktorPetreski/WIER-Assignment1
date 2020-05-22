@@ -82,13 +82,18 @@ For the third assignment we implemented an inverted index for information retrie
 - tabulate
 - tqdm
 
-Call `implementation-indexing/run-basic-search.py` or `implementation-indexing/run-sqlite-search.py` with the seach parameter that you want to query. They have to be called from the root folder.
+Call `implementation-indexing/run-basic-search.py` or `implementation-indexing/run-sqlite-search.py` with the search parameter that you want to query. They have to be called from the root folder.
 
 Examples: `implementation-indexing/run-basic-search.py "social services"`, `implementation-indexing/run-sqlite-search.py "social services"`.
 
 Both of the functions will print the output in the required format on the standard output.
 
-> You can try to somewhat limit the terminal horizontal output using `tput rmam` (should disable the text wrapping) and then to reenable the wrapping `tput smam`
+If you want to format the output with new lines for better visualization, you can call the script with additional argument: `--pretty_print True`.
+
+Examples: `implementation-indexing/run-basic-search.py "social services" --pretty_print True`, `implementation-indexing/run-sqlite-search.py "social services" --pretty_print True`.
+
+
+> If `--pretty_print` is not your preferred way of formatting, you can try to somewhat limit the terminal horizontal output using `tput rmam` (should disable the text wrapping) and then to reenable the wrapping `tput smam`
 
 ## Results
 > Click to expand
